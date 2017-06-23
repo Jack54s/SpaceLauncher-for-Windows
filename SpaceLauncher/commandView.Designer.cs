@@ -40,8 +40,14 @@
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.刷新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Console = new System.Windows.Forms.NotifyIcon(this.components);
+            this.startWithBoot = new System.Windows.Forms.CheckBox();
             this.ListContainer.SuspendLayout();
             this.RightClickMenu.SuspendLayout();
+            this.Menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // LineHeight
@@ -75,12 +81,12 @@
             this.ListContainer.ColumnCount = 1;
             this.ListContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.ListContainer.Controls.Add(this.commandList, 0, 0);
-            this.ListContainer.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ListContainer.Location = new System.Drawing.Point(0, 71);
+            this.ListContainer.Margin = new System.Windows.Forms.Padding(3, 3, 3, 30);
             this.ListContainer.Name = "ListContainer";
             this.ListContainer.RowCount = 1;
             this.ListContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ListContainer.Size = new System.Drawing.Size(511, 286);
+            this.ListContainer.Size = new System.Drawing.Size(511, 258);
             this.ListContainer.TabIndex = 3;
             // 
             // commandList
@@ -101,7 +107,7 @@
             this.commandList.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
             this.commandList.Name = "commandList";
             this.commandList.ShowItemToolTips = true;
-            this.commandList.Size = new System.Drawing.Size(491, 280);
+            this.commandList.Size = new System.Drawing.Size(491, 252);
             this.commandList.SmallImageList = this.LineHeight;
             this.commandList.TabIndex = 1;
             this.commandList.UseCompatibleStateImageBehavior = false;
@@ -124,27 +130,72 @@
             this.删除ToolStripMenuItem,
             this.刷新ToolStripMenuItem});
             this.RightClickMenu.Name = "RightClickMenu";
-            this.RightClickMenu.Size = new System.Drawing.Size(182, 84);
+            this.RightClickMenu.Size = new System.Drawing.Size(115, 56);
             // 
             // 删除ToolStripMenuItem
             // 
             this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.RemoveItem);
             // 
             // 刷新ToolStripMenuItem
             // 
             this.刷新ToolStripMenuItem.Name = "刷新ToolStripMenuItem";
-            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.刷新ToolStripMenuItem.Text = "刷新";
             this.刷新ToolStripMenuItem.Click += new System.EventHandler(this.ReloadList);
+            // 
+            // Menu
+            // 
+            this.Menu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.显示ToolStripMenuItem,
+            this.退出ToolStripMenuItem});
+            this.Menu.Name = "Menu";
+            this.Menu.Size = new System.Drawing.Size(115, 56);
+            // 
+            // 显示ToolStripMenuItem
+            // 
+            this.显示ToolStripMenuItem.Name = "显示ToolStripMenuItem";
+            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.显示ToolStripMenuItem.Text = "显示";
+            this.显示ToolStripMenuItem.Click += new System.EventHandler(this.Console_Display);
+            // 
+            // 退出ToolStripMenuItem
+            // 
+            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.退出ToolStripMenuItem.Text = "退出";
+            this.退出ToolStripMenuItem.Click += new System.EventHandler(this.MenuExit);
+            // 
+            // Console
+            // 
+            this.Console.ContextMenuStrip = this.Menu;
+            this.Console.Icon = ((System.Drawing.Icon)(resources.GetObject("Console.Icon")));
+            this.Console.Text = "SpaceLauncher";
+            this.Console.Visible = true;
+            this.Console.Click += new System.EventHandler(this.Console_MouseDown);
+            // 
+            // startWithBoot
+            // 
+            this.startWithBoot.AutoSize = true;
+            this.startWithBoot.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.startWithBoot.Location = new System.Drawing.Point(23, 336);
+            this.startWithBoot.Margin = new System.Windows.Forms.Padding(0);
+            this.startWithBoot.Name = "startWithBoot";
+            this.startWithBoot.Size = new System.Drawing.Size(91, 24);
+            this.startWithBoot.TabIndex = 4;
+            this.startWithBoot.Text = "开机启动";
+            this.startWithBoot.UseVisualStyleBackColor = true;
+            this.startWithBoot.CheckedChanged += new System.EventHandler(this.checkAutoRun);
             // 
             // commandView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 357);
+            this.ClientSize = new System.Drawing.Size(511, 364);
+            this.Controls.Add(this.startWithBoot);
             this.Controls.Add(this.ListContainer);
             this.Controls.Add(this.Remove);
             this.Controls.Add(this.Add);
@@ -153,12 +204,16 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(529, 378);
             this.Name = "commandView";
-            this.Text = "commandView";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "SpaceLauncher";
             this.Load += new System.EventHandler(this.commandView_Load);
             this.SizeChanged += new System.EventHandler(this.commandView_SizeChanged);
             this.ListContainer.ResumeLayout(false);
             this.RightClickMenu.ResumeLayout(false);
+            this.Menu.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -173,5 +228,10 @@
         private System.Windows.Forms.ContextMenuStrip RightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 刷新ToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip Menu;
+        private System.Windows.Forms.ToolStripMenuItem 显示ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon Console;
+        private System.Windows.Forms.CheckBox startWithBoot;
     }
 }

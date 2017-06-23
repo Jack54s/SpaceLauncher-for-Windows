@@ -50,8 +50,11 @@
             this.Command.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.Command.Location = new System.Drawing.Point(76, 6);
             this.Command.Name = "Command";
-            this.Command.Size = new System.Drawing.Size(269, 27);
+            this.Command.ReadOnly = true;
+            this.Command.Size = new System.Drawing.Size(117, 27);
             this.Command.TabIndex = 0;
+            this.Command.Text = "Space+";
+            this.Command.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Command_KeyPress);
             // 
             // label1
             // 

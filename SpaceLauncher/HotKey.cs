@@ -22,6 +22,11 @@ namespace SpaceLauncher
              int id                      //要取消热键的ID
              );
 
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern short GlobalAddAtom(string lpString);
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern short GlobalDeleteAtom(short nAtom);
+
         //定义了辅助键的名称（将数字转变为字符以便于记忆，也可去除此枚举而直接使用数值）
         [Flags()]
         public enum KeyModifiers

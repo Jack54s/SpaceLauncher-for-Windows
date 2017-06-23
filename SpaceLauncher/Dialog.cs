@@ -7,11 +7,13 @@ namespace SpaceLauncher
     {
         HintDialog hi;  //提示框
         private static addCommand _instance = null;
+        private String keyCode = "";
 
         private addCommand()
         {
             InitializeComponent();
             this.resourceType.SelectedIndex = this.resourceType.Items.IndexOf("文件");
+            Command.Select(Command.Text.Length, 0);
             hi = new HintDialog();
         }
 
@@ -52,13 +54,12 @@ namespace SpaceLauncher
         private void addProgram_Click(object sender, EventArgs e)
         {
             String command;
+            command = Command.Text.Substring(Command.Text.LastIndexOf('+') + 1);
             LoadConfig writeConfig;
-            String[] commandArray;
 
             switch (resourceType.SelectedIndex)
             {
                 case 0:
-                    command = Command.Text;
                     String fileName = program.FileName;
                     if (command.Trim() == "")
                     {
@@ -73,55 +74,40 @@ namespace SpaceLauncher
                         return;
                     }
                     writeConfig = new LoadConfig(Application.StartupPath + @"\command.ini");
-                    commandArray = command.Split('|');
-                    foreach (String comm in commandArray)
+                    if (args.Text.Trim() != "")
                     {
-                        if (comm.Trim() == "")
+                        fileName += "?" + args.Text.Trim();
+                    }
+                    if (resource.Text != "选择文件" && resource.Text.Trim() != "")
+                    {
+                        if (args.Text.Trim() == "")
                         {
-                            continue;
-                        }
-                        if (comm.Trim().Contains("=") == true)
-                        {
-                            MessageBox.Show("指令中不得含有'='字符");
-                            continue;
-                        }
-                        if (args.Text.Trim() != "")
-                        {
-                            fileName += "?" + args.Text.Trim();
-                        }
-                        if (resource.Text.Trim() != "")
-                        {
-                            if (args.Text.Trim() == "")
-                            {
-                                fileName += "?" + resource.Text.Trim();
-                            }
-                            else
-                            {
-                                fileName += " " + resource.Text.Trim();
-                            }
-                        }
-                        if (writeConfig.ReadIni("Command List", comm) != "")
-                        {
-                            DialogResult dr = MessageBox.Show(comm + "指令已存在，是否覆盖？", "咒语记混了吗？", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                            if (dr == DialogResult.OK)
-                            {
-                                writeConfig.IniWriteValue("Command List", comm.Trim(), fileName);
-                            }
-                            else if (dr == DialogResult.Cancel)
-                            {
-                                continue;
-                            }
+                            fileName += "?" + resource.Text.Trim();
                         }
                         else
                         {
-                            writeConfig.IniWriteValue("Command List", comm.Trim(), fileName);
+                            fileName += " " + resource.Text.Trim();
                         }
+                    }
+                    if (writeConfig.ReadIni("Command List", command) != "")
+                    {
+                        DialogResult dr = MessageBox.Show(command + "热键已存在，是否覆盖？", "咒语记混了吗？", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                        if (dr == DialogResult.OK)
+                        {
+                            writeConfig.IniWriteValue("Command List", command.Trim(), fileName);
+                        }
+                        else if (dr == DialogResult.Cancel)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        writeConfig.IniWriteValue("Command List", command.Trim(), fileName);
                     }
                     hi.Close();
                     Close();
                     break;
                 case 1:
-                    command = Command.Text;
                     String folderName = "explorer.exe?" + folder.Text;
                     if (command.Trim() == "")
                     {
@@ -136,40 +122,25 @@ namespace SpaceLauncher
                         return;
                     }
                     writeConfig = new LoadConfig(Application.StartupPath + @"\command.ini");
-                    commandArray = command.Split('|');
-                    foreach (String comm in commandArray)
+                    if (writeConfig.ReadIni("Command List", command) != "")
                     {
-                        if (comm.Trim() == "")
+                        DialogResult dr = MessageBox.Show(command + "热键已存在，是否覆盖？", "咒语记混了吗？", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                        if (dr == DialogResult.OK)
                         {
-                            continue;
+                            writeConfig.IniWriteValue("Command List", command.Trim(), folderName);
                         }
-                        if (comm.Trim().Contains("=") == true)
+                        else if (dr == DialogResult.Cancel)
                         {
-                            MessageBox.Show("指令中不得含有'='字符");
-                            continue;
                         }
-                        if (writeConfig.ReadIni("Command List", comm) != "")
-                        {
-                            DialogResult dr = MessageBox.Show(comm + "指令已存在，是否覆盖？", "咒语记混了吗？", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                            if (dr == DialogResult.OK)
-                            {
-                                writeConfig.IniWriteValue("Command List", comm.Trim(), folderName);
-                            }
-                            else if (dr == DialogResult.Cancel)
-                            {
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            writeConfig.IniWriteValue("Command List", comm.Trim(), folderName);
-                        }
+                    }
+                    else
+                    {
+                        writeConfig.IniWriteValue("Command List", command.Trim(), folderName);
                     }
                     hi.Close();
                     Close();
                     break;
                 case 2:
-                    command = Command.Text;
                     String url = webSite.Text;
                     if (url.Trim() == "")
                     {
@@ -191,34 +162,20 @@ namespace SpaceLauncher
                     }
                     
                     writeConfig = new LoadConfig(Application.StartupPath + @"\command.ini");
-                    commandArray = command.Split('|');
-                    foreach (String comm in commandArray)
+                    if (writeConfig.ReadIni("Command List", command) != "")
                     {
-                        if (comm.Trim() == "")
+                        DialogResult dr = MessageBox.Show(command + "热键已存在，是否覆盖？", "咒语记混了吗？", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                        if (dr == DialogResult.OK)
                         {
-                            continue;
+                            writeConfig.IniWriteValue("Command List", command.Trim(), site);
                         }
-                        if (comm.Trim().Contains("=") == true)
+                        else if (dr == DialogResult.Cancel)
                         {
-                            MessageBox.Show("指令中不得含有'='字符");
-                            continue;
                         }
-                        if (writeConfig.ReadIni("Command List", comm) != "")
-                        {
-                            DialogResult dr = MessageBox.Show(comm + "指令已存在，是否覆盖？", "咒语记混了吗？", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                            if (dr == DialogResult.OK)
-                            {
-                                writeConfig.IniWriteValue("Command List", comm.Trim(), site);
-                            }
-                            else if (dr == DialogResult.Cancel)
-                            {
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            writeConfig.IniWriteValue("Command List", comm.Trim(), site);
-                        }
+                    }
+                    else
+                    {
+                        writeConfig.IniWriteValue("Command List", command.Trim(), site);
                     }
                     hi.Close();
                     Close();
@@ -227,7 +184,6 @@ namespace SpaceLauncher
                     MessageBox.Show("请选择类型！");
                     break;
             }
-            
         }
 
         /// <summary>
@@ -304,6 +260,35 @@ namespace SpaceLauncher
                     resource.Visible = false;
                     break;
 
+            }
+        }
+        /// <summary>
+        /// 设置热键时按下键盘的事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Command_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            Command.Select(Command.Text.Length, 0);
+            if((int)e.KeyChar >= 97 && (int)e.KeyChar <= 122)
+            {
+                e.KeyChar = (char)((int)e.KeyChar - 32);
+            }
+            keyCode = e.KeyChar.ToString();
+            if (keyCode == "")
+            {
+                this.Command.Text = "Space+";
+                Command.Select(Command.Text.Length, 0);
+            }
+            else if (e.KeyChar == '\b')
+            {
+                this.Command.Text = "Space+";
+                Command.Select(Command.Text.Length, 0);
+            }
+            else
+            {
+                this.Command.Text = "Space+" + keyCode;
+                Command.Select(Command.Text.Length, 0);
             }
         }
     }

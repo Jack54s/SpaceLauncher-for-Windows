@@ -33,10 +33,8 @@
             this.HotKey = new System.Windows.Forms.Label();
             this.HotKeyText = new System.Windows.Forms.TextBox();
             this.Confirm = new System.Windows.Forms.Button();
-            this.addCommand = new System.Windows.Forms.Button();
             this.Cancel = new System.Windows.Forms.Button();
             this.Apply = new System.Windows.Forms.Button();
-            this.ViewCommand = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // startWithBoot
@@ -85,18 +83,6 @@
             this.Confirm.UseVisualStyleBackColor = true;
             this.Confirm.Click += new System.EventHandler(this.Confirm_Click);
             // 
-            // addCommand
-            // 
-            this.addCommand.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.addCommand.Location = new System.Drawing.Point(8, 30);
-            this.addCommand.Margin = new System.Windows.Forms.Padding(0);
-            this.addCommand.Name = "addCommand";
-            this.addCommand.Size = new System.Drawing.Size(70, 25);
-            this.addCommand.TabIndex = 7;
-            this.addCommand.Text = "添加命令";
-            this.addCommand.UseVisualStyleBackColor = true;
-            this.addCommand.Click += new System.EventHandler(this.addCommand_Click);
-            // 
             // Cancel
             // 
             this.Cancel.Location = new System.Drawing.Point(123, 60);
@@ -117,17 +103,6 @@
             this.Apply.UseVisualStyleBackColor = true;
             this.Apply.Click += new System.EventHandler(this.Apply_Click);
             // 
-            // ViewCommand
-            // 
-            this.ViewCommand.Location = new System.Drawing.Point(90, 29);
-            this.ViewCommand.Margin = new System.Windows.Forms.Padding(0);
-            this.ViewCommand.Name = "ViewCommand";
-            this.ViewCommand.Size = new System.Drawing.Size(70, 25);
-            this.ViewCommand.TabIndex = 10;
-            this.ViewCommand.Text = "管理命令";
-            this.ViewCommand.UseVisualStyleBackColor = true;
-            this.ViewCommand.Click += new System.EventHandler(this.ViewCommand_Click);
-            // 
             // Set
             // 
             this.AcceptButton = this.Confirm;
@@ -135,10 +110,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(331, 88);
             this.ControlBox = false;
-            this.Controls.Add(this.ViewCommand);
             this.Controls.Add(this.Apply);
             this.Controls.Add(this.Cancel);
-            this.Controls.Add(this.addCommand);
             this.Controls.Add(this.Confirm);
             this.Controls.Add(this.HotKeyText);
             this.Controls.Add(this.HotKey);
@@ -161,9 +134,7 @@
         private System.Windows.Forms.Label HotKey;
         private System.Windows.Forms.TextBox HotKeyText;
         private System.Windows.Forms.Button Confirm;
-        private System.Windows.Forms.Button addCommand;
         private System.Windows.Forms.Button Cancel;
         private System.Windows.Forms.Button Apply;
-        private System.Windows.Forms.Button ViewCommand;
     }
 }

@@ -28,16 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.command = new System.Windows.Forms.TextBox();
-            this.Console = new System.Windows.Forms.NotifyIcon(this.components);
-            this.Menu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Esc = new System.Windows.Forms.Button();
-            this.Menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // command
@@ -49,45 +42,6 @@
             this.command.Size = new System.Drawing.Size(224, 27);
             this.command.TabIndex = 0;
             this.command.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.command_Press);
-            // 
-            // Console
-            // 
-            this.Console.ContextMenuStrip = this.Menu;
-            this.Console.Icon = ((System.Drawing.Icon)(resources.GetObject("Console.Icon")));
-            this.Console.Text = "SpaceLauncher";
-            this.Console.Visible = true;
-            this.Console.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Console_MouseDown);
-            // 
-            // Menu
-            // 
-            this.Menu.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.显示ToolStripMenuItem,
-            this.设置ToolStripMenuItem,
-            this.退出ToolStripMenuItem});
-            this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(115, 82);
-            // 
-            // 显示ToolStripMenuItem
-            // 
-            this.显示ToolStripMenuItem.Name = "显示ToolStripMenuItem";
-            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
-            this.显示ToolStripMenuItem.Text = "显示";
-            this.显示ToolStripMenuItem.Click += new System.EventHandler(this.Console_Display);
-            // 
-            // 设置ToolStripMenuItem
-            // 
-            this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
-            this.设置ToolStripMenuItem.Text = "设置";
-            this.设置ToolStripMenuItem.Click += new System.EventHandler(this.Set_Click);
-            // 
-            // 退出ToolStripMenuItem
-            // 
-            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
-            this.退出ToolStripMenuItem.Text = "退出";
-            this.退出ToolStripMenuItem.Click += new System.EventHandler(this.MenuExit);
             // 
             // Esc
             // 
@@ -122,7 +76,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SpaceLauncher";
             this.TopMost = true;
-            this.Menu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -131,11 +84,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox command;
-        private System.Windows.Forms.NotifyIcon Console;
-        private System.Windows.Forms.ContextMenuStrip Menu;
-        private System.Windows.Forms.ToolStripMenuItem 显示ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.Button Esc;
     }
 }

@@ -70,7 +70,7 @@ namespace SpaceLauncher
         /// <param name="e"></param>
         private void addCommand_Click(object sender, EventArgs e)
         {
-            addCommand ac = SpaceLauncher.addCommand.getInstance();
+            addCommand ac = addCommand.getInstance();
             ac.Show();
         }
 
@@ -199,7 +199,7 @@ namespace SpaceLauncher
                     }
                 }
                 InitComponent();
-                MainForm.SetHotkey(config, Application.OpenForms["MainForm"].Handle);
+                //commandView.SetHotkey(config, Application.OpenForms["MainForm"].Handle);
             }
             catch(Exception subStringE)
             {
@@ -214,7 +214,7 @@ namespace SpaceLauncher
         /// <param name="e"></param>
         private void ViewCommand_Click(object sender, EventArgs e)
         {
-            commandView cv = commandView.getInstance();
+            commandView cv = new commandView();
             cv.Show();
         }
     }

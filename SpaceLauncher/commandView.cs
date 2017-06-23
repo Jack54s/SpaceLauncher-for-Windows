@@ -1,27 +1,158 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace SpaceLauncher
 {
     public partial class commandView : Form
     {
         LoadConfig ini;
-        private static commandView _instance = null;
+        HintDialog hi;
+        String appName = "SpaceLauncher";
 
-        private commandView()
+        [DllImport("user32")]
+        static extern int SetForegroundWindow(IntPtr hwnd);
+
+        public commandView()
         {
             InitializeComponent();
             ini = new LoadConfig(Application.StartupPath + @"\command.ini");
+            hi = new HintDialog();
             InitList();
+            Keys
+            //SetHotKey(ini, this.Handle);
+            this.WindowState = FormWindowState.Minimized;
+            if (AutoRun.isAutoRun(appName, Application.ExecutablePath))
+            {
+                startWithBoot.Checked = true;
+            }
+            else
+            {
+                startWithBoot.Checked = false;
+            }
         }
 
-        public static commandView getInstance()
+        /// <summary>
+        /// 程序初始化时设置热键
+        /// </summary>
+        /// <param name="config">配置类</param>
+        /// <param name="handle">主窗体句柄</param>
+        public static void SetHotkey(LoadConfig config, IntPtr handle)
         {
-            if(_instance == null || _instance.IsDisposed)
+            try
             {
-                _instance = new commandView();
+                HotKey.UnregisterHotKey(handle, 100);
+                if (!config.ExistINIFile())
+                {
+                    MessageBox.Show("ini文件不存在");
+                    Application.Exit();
+                }
+                int hotkeycode = (config.ReadIni("Set", "Ctrl") == "True" ? 100 : 0) + (config.ReadIni("Set", "Alt") == "True" ? 10 : 0) + (config.ReadIni("Set", "Shift") == "True" ? 1 : 0);
+                if (config.ReadIni("Set", "KeyCode") == "")
+                {
+                    MessageBox.Show("Something Wrong!\n KeyCode = \"\"");
+                    Application.Exit();
+                }
+                Keys vk = (Keys)Enum.Parse(typeof(Keys), config.ReadIni("Set", "KeyCode")); ;
+                switch (hotkeycode)
+                {
+                    case 0:
+                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.None, vk);
+                        break;
+                    case 1:
+                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Shift, vk);
+                        break;
+                    case 10:
+                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Alt, vk);
+                        break;
+                    case 11:
+                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Alt | HotKey.KeyModifiers.Shift, vk);
+                        break;
+                    case 100:
+                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Ctrl, vk);
+                        break;
+                    case 101:
+                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Ctrl | HotKey.KeyModifiers.Shift, vk);
+                        break;
+                    case 110:
+                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Ctrl | HotKey.KeyModifiers.Alt, vk);
+                        break;
+                    case 111:
+                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Ctrl | HotKey.KeyModifiers.Alt | HotKey.KeyModifiers.Shift, vk);
+                        break;
+                    default:
+                        MessageBox.Show("肯定有什么地方错了，嗯~");
+                        break;
+                }
             }
-            return _instance;
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                Application.Exit();
+            }
+        }
+
+        /// <summary>
+        /// 菜单退出按钮事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuExit(object sender, EventArgs e)
+        {
+            hi.Close();
+            HotKey.UnregisterHotKey(Handle, 100);
+            Application.Exit();
+        }
+
+        /// <summary>
+        /// 托盘图标左击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Console_MouseDown(object sender, EventArgs e)
+        {
+            MouseEventArgs Mouse_e = (MouseEventArgs)e;
+            if (Mouse_e.Button == MouseButtons.Left)
+            {
+                this.ShowInTaskbar = true;
+                this.WindowState = FormWindowState.Normal;
+            }
+
+        }
+
+        /// <summary>
+        /// 托盘图标显示按钮事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Console_Display(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
+            SetForegroundWindow(this.Handle);
+        }
+
+        /// <summary>
+        /// 改变窗口关闭按钮的行为
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+            this.ShowInTaskbar = false;
+            e.Cancel = true;
+        }
+
+        /// <summary>
+        /// 托盘设置按钮点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Set_Click(object sender, EventArgs e)
+        {
+            Set set = Set.getInstance(ini);
+            set.Show();
         }
 
         /// <summary>
@@ -134,6 +265,14 @@ namespace SpaceLauncher
             catch (Exception ace)
             {
                 MessageBox.Show(ace.Message);
+            }
+        }
+
+        private void checkAutoRun(object sender, EventArgs e)
+        {
+            if (startWithBoot.Checked != AutoRun.isAutoRun(appName, Application.ExecutablePath))
+            {
+                AutoRun.setAutoRun(appName, Application.ExecutablePath, startWithBoot.Checked);
             }
         }
     }
