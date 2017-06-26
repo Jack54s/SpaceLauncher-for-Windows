@@ -10,6 +10,9 @@ namespace SpaceLauncher
         LoadConfig ini;
         HintDialog hi;
         String appName = "SpaceLauncher";
+        private KeyBoardHook _keyboardHook = new KeyBoardHook();
+        //判断空格是否按下
+        private static bool flag = false;
 
         [DllImport("user32")]
         static extern int SetForegroundWindow(IntPtr hwnd);
@@ -20,9 +23,9 @@ namespace SpaceLauncher
             ini = new LoadConfig(Application.StartupPath + @"\command.ini");
             hi = new HintDialog();
             InitList();
-            Keys
-            //SetHotKey(ini, this.Handle);
+            this.Hide();
             this.WindowState = FormWindowState.Minimized;
+            this.ShowInTaskbar = false;
             if (AutoRun.isAutoRun(appName, Application.ExecutablePath))
             {
                 startWithBoot.Checked = true;
@@ -31,65 +34,31 @@ namespace SpaceLauncher
             {
                 startWithBoot.Checked = false;
             }
+            _keyboardHook.InstallHook(KeyPress);
         }
 
+        [DllImport("user32")]
+        static extern void keybd_event (byte bvk, byte scan, int dwflags, int dwextrainfo);
         /// <summary>
-        /// 程序初始化时设置热键
+        /// 客户端键盘捕捉事件
         /// </summary>
-        /// <param name="config">配置类</param>
-        /// <param name="handle">主窗体句柄</param>
-        public static void SetHotkey(LoadConfig config, IntPtr handle)
+        /// <param name="hookStruct">由Hook程序发送的按键信息</param>
+        /// <param name="handle">是否拦截</param>
+        public void KeyPress(KeyBoardHook.HookStruct hookStruct, out bool handle)
         {
-            try
+            handle = false;
+            if(flag == true || (hookStruct.vkCode == (int)(Keys.Space) && hookStruct.flags == 0))
             {
-                HotKey.UnregisterHotKey(handle, 100);
-                if (!config.ExistINIFile())
+                flag = true;
+                if(hookStruct.vkCode == (int)(Keys.D) && hookStruct.flags == 128)
                 {
-                    MessageBox.Show("ini文件不存在");
-                    Application.Exit();
-                }
-                int hotkeycode = (config.ReadIni("Set", "Ctrl") == "True" ? 100 : 0) + (config.ReadIni("Set", "Alt") == "True" ? 10 : 0) + (config.ReadIni("Set", "Shift") == "True" ? 1 : 0);
-                if (config.ReadIni("Set", "KeyCode") == "")
-                {
-                    MessageBox.Show("Something Wrong!\n KeyCode = \"\"");
-                    Application.Exit();
-                }
-                Keys vk = (Keys)Enum.Parse(typeof(Keys), config.ReadIni("Set", "KeyCode")); ;
-                switch (hotkeycode)
-                {
-                    case 0:
-                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.None, vk);
-                        break;
-                    case 1:
-                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Shift, vk);
-                        break;
-                    case 10:
-                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Alt, vk);
-                        break;
-                    case 11:
-                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Alt | HotKey.KeyModifiers.Shift, vk);
-                        break;
-                    case 100:
-                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Ctrl, vk);
-                        break;
-                    case 101:
-                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Ctrl | HotKey.KeyModifiers.Shift, vk);
-                        break;
-                    case 110:
-                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Ctrl | HotKey.KeyModifiers.Alt, vk);
-                        break;
-                    case 111:
-                        HotKey.RegisterHotKey(handle, 100, HotKey.KeyModifiers.Ctrl | HotKey.KeyModifiers.Alt | HotKey.KeyModifiers.Shift, vk);
-                        break;
-                    default:
-                        MessageBox.Show("肯定有什么地方错了，嗯~");
-                        break;
+                    keybd_event(32, 0, 2, 0);
+                    MessageBox.Show("OK");
                 }
             }
-            catch (Exception e)
+            if(hookStruct.vkCode == (int)(Keys.Space) && hookStruct.flags == 128)
             {
-                MessageBox.Show(e.Message);
-                Application.Exit();
+                flag = false;
             }
         }
 
@@ -101,7 +70,7 @@ namespace SpaceLauncher
         private void MenuExit(object sender, EventArgs e)
         {
             hi.Close();
-            HotKey.UnregisterHotKey(Handle, 100);
+            HotKey.UnregisterHotKey(Handle, 101);
             Application.Exit();
         }
 
@@ -115,6 +84,7 @@ namespace SpaceLauncher
             MouseEventArgs Mouse_e = (MouseEventArgs)e;
             if (Mouse_e.Button == MouseButtons.Left)
             {
+                this.Show();
                 this.ShowInTaskbar = true;
                 this.WindowState = FormWindowState.Normal;
             }
@@ -128,6 +98,7 @@ namespace SpaceLauncher
         /// <param name="e"></param>
         private void Console_Display(object sender, EventArgs e)
         {
+            this.Show();
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
             SetForegroundWindow(this.Handle);
@@ -139,6 +110,7 @@ namespace SpaceLauncher
         /// <param name="e"></param>
         protected override void OnClosing(CancelEventArgs e)
         {
+            this.Hide();
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
             e.Cancel = true;
@@ -274,6 +246,33 @@ namespace SpaceLauncher
             {
                 AutoRun.setAutoRun(appName, Application.ExecutablePath, startWithBoot.Checked);
             }
+        }
+
+        /// <summary>
+        /// Windows消息监听，监视是否按下热键
+        /// </summary>
+        /// <param name="m"></param>
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_HOTKEY = 0x0312;//如果m.Msg的值为0x0312那么表示用户按下了热键
+            const int WM_QUERYENDSESSION = 0X0011;
+            switch (m.Msg)
+            {
+                case WM_HOTKEY:
+                    switch (m.WParam.ToString())
+                    {
+                        case "101":
+                            MessageBox.Show("Hll");
+                            break;
+                        default: break;
+                    }
+                    break;
+                case WM_QUERYENDSESSION:
+                    Application.Exit();
+                    break;
+                default: break;
+            }
+            base.WndProc(ref m);
         }
     }
 }
