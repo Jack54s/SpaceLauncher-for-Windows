@@ -41,6 +41,7 @@
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.刷新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.EnabledMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Console = new System.Windows.Forms.NotifyIcon(this.components);
@@ -130,19 +131,19 @@
             this.删除ToolStripMenuItem,
             this.刷新ToolStripMenuItem});
             this.RightClickMenu.Name = "RightClickMenu";
-            this.RightClickMenu.Size = new System.Drawing.Size(109, 52);
+            this.RightClickMenu.Size = new System.Drawing.Size(115, 56);
             // 
             // 删除ToolStripMenuItem
             // 
             this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(108, 24);
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.RemoveItem);
             // 
             // 刷新ToolStripMenuItem
             // 
             this.刷新ToolStripMenuItem.Name = "刷新ToolStripMenuItem";
-            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(108, 24);
+            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.刷新ToolStripMenuItem.Text = "刷新";
             this.刷新ToolStripMenuItem.Click += new System.EventHandler(this.ReloadList);
             // 
@@ -150,22 +151,30 @@
             // 
             this.Menu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.EnabledMenuItem,
             this.显示ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(109, 52);
+            this.Menu.Size = new System.Drawing.Size(115, 82);
+            // 
+            // EnabledMenuItem
+            // 
+            this.EnabledMenuItem.Name = "EnabledMenuItem";
+            this.EnabledMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.EnabledMenuItem.Text = "禁用";
+            this.EnabledMenuItem.Click += new System.EventHandler(this.Enabled_Click);
             // 
             // 显示ToolStripMenuItem
             // 
             this.显示ToolStripMenuItem.Name = "显示ToolStripMenuItem";
-            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(108, 24);
+            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.显示ToolStripMenuItem.Text = "显示";
             this.显示ToolStripMenuItem.Click += new System.EventHandler(this.Console_Display);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(108, 24);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.MenuExit);
             // 
@@ -232,5 +241,6 @@
         private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon Console;
         private System.Windows.Forms.CheckBox startWithBoot;
+        private System.Windows.Forms.ToolStripMenuItem EnabledMenuItem;
     }
 }

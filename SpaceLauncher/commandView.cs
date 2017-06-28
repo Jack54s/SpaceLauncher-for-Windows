@@ -17,7 +17,7 @@ namespace SpaceLauncher
         private static bool flag = false;
         private static bool istyping = false;
         private static bool RunningFullScreenApp;
-        private static bool f = false;
+        private static bool enabled = true;
         private DateTime lasttime = DateTime.Now;
         private int uCallBackMsg;
 
@@ -84,84 +84,60 @@ namespace SpaceLauncher
                     delay.Enabled = true;
                     delay.Start();
                 }
-                if (hookStruct.vkCode == (int)(Keys.A) && hookStruct.flags == 0)
+                if (hookStruct.flags == 0)
                 {
-                    handle = true;
-                    MessageBox.Show(RunningFullScreenApp.ToString());
-                }
-                if (hookStruct.vkCode == (int)(Keys.B) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                }
-                if (hookStruct.vkCode == (int)(Keys.C) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.D) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.E) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.F) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.G) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.H) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.I) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.J) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.K) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.L) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.M) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.N) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.O) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
-                }
-                if (hookStruct.vkCode == (int)(Keys.P) && hookStruct.flags == 0)
-                {
-                    handle = true;
-                    MessageBox.Show("OK");
+                    String comtxt = ((char)hookStruct.vkCode).ToString();
+                    String fileName = ini.ReadIni("Command List", comtxt);
+
+                    if (fileName != "")
+                    {
+                        handle = true;
+                        String[] progargs = fileName.Split('?');
+                        String program = progargs[0];
+
+                        if (progargs.Length < 2)
+                        {
+                            if (System.IO.File.Exists(program))
+                            {
+                                try
+                                {
+                                    System.Diagnostics.Process.Start(program);
+                                }
+                                catch (Exception pse)
+                                {
+                                    MessageBox.Show(pse.Message);
+                                }
+                            }
+                            else
+                            {
+                                hi.setHint("文件“" + program + "”不存在！");
+                                hi.Show();
+                            }
+                        }
+                        else
+                        {
+                            if (System.IO.Directory.Exists(progargs[1].Trim()) || progargs[1].Contains(":"))
+                            {
+                                try
+                                {
+                                    System.Diagnostics.Process.Start(program, progargs[1].Trim());
+                                }
+                                catch (Exception pse)
+                                {
+                                    MessageBox.Show(pse.Message);
+                                }
+                            }
+                            else
+                            {
+                                hi.setHint("路径" + progargs[1].Trim() + "不存在");
+                                hi.Show();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
             if (hookStruct.vkCode == (int)(Keys.Space) && hookStruct.flags == 128)
@@ -420,6 +396,22 @@ namespace SpaceLauncher
             else
             {
                 CheckFullScreenAPIWrapper.SHAppBarMessage((int)ABMsg.ABM_REMOVE, ref abd);
+            }
+        }
+
+        private void Enabled_Click(object sender, EventArgs e)
+        {
+            if(enabled == true)
+            {
+                _keyboardHook.UninstallHook();
+                enabled = false;
+                EnabledMenuItem.Text = "启用";
+            }
+            else
+            {
+                _keyboardHook.InstallHook(KeyPress);
+                enabled = true;
+                EnabledMenuItem.Text = "禁用";
             }
         }
     }

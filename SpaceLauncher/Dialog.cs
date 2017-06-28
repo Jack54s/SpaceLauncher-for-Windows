@@ -61,8 +61,7 @@ namespace SpaceLauncher
             Match m = Regex.Match(command, rule);
             if(!m.Success)
             {
-                MessageBox.Show("Space+后面的字符必须为A-Z0-9,./;'[]\\字符中的一个");
-                //hi.Show();
+                MessageBox.Show("Space+后面的字符必须为A-Z0-9,./;'[]\\-=字符中的一个");
                 return;
             }
 
