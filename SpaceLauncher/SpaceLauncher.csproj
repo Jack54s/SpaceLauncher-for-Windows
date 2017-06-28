@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoRun.cs" />
+    <Compile Include="CheckFullScreenAPIWrapper.cs" />
     <Compile Include="commandView.cs">
       <SubType>Form</SubType>
     </Compile>
