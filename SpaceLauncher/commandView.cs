@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -32,6 +33,8 @@ namespace SpaceLauncher
         [DllImport("user32")]
         static extern void keybd_event(byte bvk, byte scan, int dwflags, int dwextrainfo);
 
+        public Dictionary<int, String> keycode = new Dictionary<int, string>();
+
         public commandView()
         {
             InitializeComponent();
@@ -50,9 +53,31 @@ namespace SpaceLauncher
             delay = new System.Timers.Timer(200);
             delay.Elapsed += new System.Timers.ElapsedEventHandler(tick);
             delay.AutoReset = false;
-            t = new System.Timers.Timer(800);
+            t = new System.Timers.Timer(600);
             t.Elapsed += new System.Timers.ElapsedEventHandler(typing);
             t.AutoReset = false;
+
+            //keycode值与String对应
+            keycode.Add(48, "0");
+            keycode.Add(49, "1");
+            keycode.Add(50, "2");
+            keycode.Add(51, "3");
+            keycode.Add(52, "4");
+            keycode.Add(53, "5");
+            keycode.Add(54, "6");
+            keycode.Add(55, "7");
+            keycode.Add(56, "8");
+            keycode.Add(57, "9");
+            keycode.Add(188, ",");
+            keycode.Add(190, ".");
+            keycode.Add(191, "/");
+            keycode.Add(186, "sm");
+            keycode.Add(222, "'");
+            keycode.Add(219, "lb");
+            keycode.Add(221, "]");
+            keycode.Add(220, "\\");
+            keycode.Add(189, "-");
+            keycode.Add(187, "eq");
         }
 
         public void typing(object source, System.Timers.ElapsedEventArgs e)
@@ -92,13 +117,22 @@ namespace SpaceLauncher
                     delay.Enabled = true;
                     delay.Start();
                 }
-                if (hookStruct.flags == 0)
+                if (hookStruct.vkCode != (int)Keys.Space && hookStruct.flags == 0)
                 {
-                    String comtxt = ((char)hookStruct.vkCode).ToString();
+                    String comtxt = null;
+                    if (keycode.ContainsKey(hookStruct.vkCode))
+                    {
+                        comtxt = keycode[hookStruct.vkCode];
+                    }
+                    else
+                    {
+                        comtxt = ((char)hookStruct.vkCode).ToString();
+                    }
                     String fileName = ini.ReadIni("Command List", comtxt);
 
                     if (fileName != "")
                     {
+                        keybd_event(8, 0, 0, 0);
                         handle = true;  //拦截键盘字符
                         String[] progargs = fileName.Split('?');
                         String program = progargs[0];
