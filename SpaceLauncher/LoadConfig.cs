@@ -31,20 +31,11 @@ namespace SpaceLauncher
                 {
                     System.IO.StreamWriter file = new System.IO.StreamWriter(iniPath, true);
                     file.WriteLine("; Guider about software");
-                    file.WriteLine("; HotKey support \"Ctrl\"|\"Alt\"|\"Shift\"+anotherKey, \"Win\" is not supported.");
-                    file.WriteLine("; When add commands, you can use \'|\' to separate several commands like \"vs|v| Visual Studio\", words that start with spaces or end with spaces will be remove");
+                    file.WriteLine("; HotKey support \"Space\" + \"A-Z\",\"0-9\",\",./;'[]\\-=\".");
                     file.WriteLine("");
                     file.WriteLine("; Command List");
                     file.WriteLine("[Command List]");
-                    file.WriteLine("cmd=C:\\Windows\\System32\\cmd.exe");
-                    file.WriteLine("");
-                    file.WriteLine("; Some set about program as following.");
-                    file.WriteLine("; Change it cautious!");
-                    file.WriteLine("[Set]");
-                    file.WriteLine("Ctrl =True");
-                    file.WriteLine("Alt=False");
-                    file.WriteLine("Shift=False");
-                    file.WriteLine("KeyCode=R");
+                    file.WriteLine("X=C:\\Windows\\System32\\cmd.exe");
                     file.Flush();
                     file.Close();
                 }

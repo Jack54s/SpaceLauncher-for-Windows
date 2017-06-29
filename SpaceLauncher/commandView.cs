@@ -9,14 +9,20 @@ namespace SpaceLauncher
     {
         LoadConfig ini;
         HintDialog hi;
+        //按下空格后的计时器，按下空格后的interval内SpaceLauncher无效
         System.Timers.Timer delay;
+        //打字过程中的计时器，在打字的过程中interval内SpaceLauncher无效
         System.Timers.Timer t;
         String appName = "SpaceLauncher";
+        //键盘钩子
         private KeyBoardHook _keyboardHook = new KeyBoardHook();
         //判断空格是否按下
         private static bool flag = false;
+        //是否在打字
         private static bool istyping = false;
+        //是否有全屏程序
         private static bool RunningFullScreenApp;
+        //是否禁用
         private static bool enabled = true;
         private DateTime lasttime = DateTime.Now;
         private int uCallBackMsg;
@@ -67,10 +73,12 @@ namespace SpaceLauncher
         public void KeyPress(KeyBoardHook.HookStruct hookStruct, out bool handle)
         {
             handle = false;
+            //全屏程序中禁用
             if (RunningFullScreenApp)
             {
                 return;
             }
+            //判断是否在打字
             if (hookStruct.vkCode != (int)Keys.Space && flag == false)
             {
                 istyping = true;
@@ -91,7 +99,7 @@ namespace SpaceLauncher
 
                     if (fileName != "")
                     {
-                        handle = true;
+                        handle = true;  //拦截键盘字符
                         String[] progargs = fileName.Split('?');
                         String program = progargs[0];
 
@@ -140,6 +148,7 @@ namespace SpaceLauncher
                     }
                 }
             }
+            //空格键抬起
             if (hookStruct.vkCode == (int)(Keys.Space) && hookStruct.flags == 128)
             {
                 handle = false;
@@ -200,17 +209,6 @@ namespace SpaceLauncher
             this.Hide();
             this.WindowState = FormWindowState.Minimized;
             e.Cancel = true;
-        }
-
-        /// <summary>
-        /// 托盘设置按钮点击事件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Set_Click(object sender, EventArgs e)
-        {
-            Set set = Set.getInstance(ini);
-            set.Show();
         }
 
         /// <summary>
@@ -282,6 +280,7 @@ namespace SpaceLauncher
             this.commandList.EndUpdate();
         }
 
+        //窗体载入时
         private void commandView_Load(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
@@ -330,6 +329,11 @@ namespace SpaceLauncher
             }
         }
 
+        /// <summary>
+        /// 开机启动CheckBox的改变事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkAutoRun(object sender, EventArgs e)
         {
             if (startWithBoot.Checked != AutoRun.isAutoRun(appName, Application.ExecutablePath))
@@ -346,6 +350,7 @@ namespace SpaceLauncher
         {
             const int WM_HOTKEY = 0x0312;//如果m.Msg的值为0x0312那么表示用户按下了热键
             const int WM_QUERYENDSESSION = 0X0011;
+            //判断是否全屏
             if (m.Msg == uCallBackMsg)
             {
                 switch (m.WParam.ToInt32())
@@ -364,15 +369,6 @@ namespace SpaceLauncher
             }
             switch (m.Msg)
             {
-                case WM_HOTKEY:
-                    switch (m.WParam.ToString())
-                    {
-                        case "101":
-                            MessageBox.Show("Hll");
-                            break;
-                        default: break;
-                    }
-                    break;
                 case WM_QUERYENDSESSION:
                     Application.Exit();
                     break;
@@ -399,6 +395,11 @@ namespace SpaceLauncher
             }
         }
 
+        /// <summary>
+        /// 菜单中禁用的事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Enabled_Click(object sender, EventArgs e)
         {
             if(enabled == true)
