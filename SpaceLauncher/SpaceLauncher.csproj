@@ -74,7 +74,7 @@
     <ManifestKeyFile>MagicBoot.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>tubiao.ico</ApplicationIcon>
+    <ApplicationIcon>SpaceLauncher.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -180,6 +180,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SpaceLauncher.ico" />
     <Content Include="tubiao.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
