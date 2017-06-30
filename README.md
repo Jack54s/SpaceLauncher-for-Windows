@@ -1,6 +1,6 @@
 # SpaceLauncher for Windows
 
-**Space + Keys(A-Z,0-9,,./;'[]]\\-=)打开程序**
+**Space + Keys(A-Z,0-9,,./;'[]\\-=)打开程序**
 
 程序下载地址：[SpaceLauncher](https://github.com/Jack54s/SpaceLauncher-for-Windows/blob/master/SpaceLauncher/bin/Release/app.publish/SpaceLauncher.exe)
 
