@@ -1,6 +1,6 @@
 # SpaceLauncher for Windows
 
-** Space + Keys(A-Z,0-9,,./;'[]]\\-=)打开程序 **
+**Space + Keys(A-Z,0-9,,./;'[]]\\-=)打开程序**
 
 程序下载地址：[SpaceLauncher](https://github.com/Jack54s/SpaceLauncher-for-Windows/blob/master/SpaceLauncher/bin/Release/app.publish/SpaceLauncher.exe)
 
@@ -40,7 +40,7 @@
 
 你手动选择），文件夹或者URL（网页的浏览器为你的默认浏览器），设置一个快捷键，快捷键必须  
 
-以空格开始~~（废话啊，我们的程序就叫SpaceLauncher嘛）~~，另外一个键必须是A-Z,0-9,或者  
+以空格开始<del>（废话啊，我们的程序就叫SpaceLauncher嘛）</del>，另外一个键必须是A-Z,0-9,或者  
 
 , . / ; ' [ ] \\ - =中的一个。
 
