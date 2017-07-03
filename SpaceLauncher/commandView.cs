@@ -10,10 +10,13 @@ namespace SpaceLauncher
     {
         LoadConfig ini;
         HintDialog hi;
+        Loading loading;
         //按下空格后的计时器，按下空格后的interval内SpaceLauncher无效
         System.Timers.Timer delay;
         //打字过程中的计时器，在打字的过程中interval内SpaceLauncher无效
         System.Timers.Timer t;
+        //载入画面的时间
+        System.Timers.Timer lt;
         String appName = "SpaceLauncher";
         //键盘钩子
         private KeyBoardHook _keyboardHook = new KeyBoardHook();
@@ -27,6 +30,7 @@ namespace SpaceLauncher
         private static bool enabled = true;
         private DateTime lasttime = DateTime.Now;
         private int uCallBackMsg;
+        private delegate void dhideLoad(object source, System.Timers.ElapsedEventArgs e);
 
         [DllImport("user32")]
         static extern int SetForegroundWindow(IntPtr hwnd);
@@ -40,6 +44,7 @@ namespace SpaceLauncher
             InitializeComponent();
             ini = new LoadConfig(Application.StartupPath + @"\command.ini");
             hi = new HintDialog();
+            loading = new Loading();
             InitList();
             if (AutoRun.isAutoRun(appName, Application.ExecutablePath))
             {
@@ -56,6 +61,9 @@ namespace SpaceLauncher
             t = new System.Timers.Timer(600);
             t.Elapsed += new System.Timers.ElapsedEventHandler(typing);
             t.AutoReset = false;
+            lt = new System.Timers.Timer(500);
+            lt.Elapsed += new System.Timers.ElapsedEventHandler(hideLoad);
+            lt.AutoReset = false;
 
             //keycode值与String对应
             keycode.Add(48, "0");
@@ -88,6 +96,27 @@ namespace SpaceLauncher
         public void tick(object source, System.Timers.ElapsedEventArgs e)
         {
             flag = true;
+        }
+
+        public void hideLoad(object source, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                if (loading.InvokeRequired)
+                {
+                    dhideLoad hl = new dhideLoad(hideLoad);
+                    this.Invoke(hl, new object[] { source, e });
+                }
+                else
+                {
+                    loading.Hide();
+                    loading.ResetImage();
+                }
+            }
+            catch(Exception ie)
+            {
+                MessageBox.Show(ie.Message);
+            }
         }
 
         /// <summary>
@@ -133,6 +162,9 @@ namespace SpaceLauncher
                     if (fileName != "")
                     {
                         keybd_event(8, 0, 0, 0);
+                        loading.Show();
+                        loading.AnimateImage();
+                        lt.Start();
                         handle = true;  //拦截键盘字符
                         String[] progargs = fileName.Split('?');
                         String program = progargs[0];
@@ -199,6 +231,7 @@ namespace SpaceLauncher
         private void MenuExit(object sender, EventArgs e)
         {
             hi.Close();
+            loading.Close();
             HotKey.UnregisterHotKey(Handle, 101);
             //this.RegisterAppBar(true);
             Application.Exit();
