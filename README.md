@@ -2,15 +2,19 @@
 
 **Space + Keys(A-Z,0-9,,./;'[]\\-=)打开程序**
 
-程序下载地址：[SpaceLauncher](https://github.com/Jack54s/SpaceLauncher-for-Windows/blob/master/SpaceLauncher/bin/Release/app.publish/SpaceLauncher.exe)
+程序下载地址：[SpaceLauncher](https://github.com/Jack54s/SpaceLauncher-for-Windows/blob/master/SpaceLauncher-for-Windows.zip)
 
 ## 使用
 
-程序为绿色版，免安装，第一次运行会在程序所在目录下建立一个ini文件，之后如果ini文件无法被找  
+程序为绿色版，免安装，解压即可用，文件中有一个.gif的动图，为SpaceLauncher启动其他程序的  
 
-到会重新创建一个新的ini文件。**使用开机启动功能时会要求修改注册表，不要担心，修改的注册表项**
+启动画面，请勿删除，否则会导致程序无法正常运行第一次运行会在程序所在目录下建立一个ini文件，  
 
-**在HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run里。**
+之后如果ini文件无法被找到会重新创建一个新的ini文件。**使用开机启动功能时会要求修改注册表，不**  
+
+**要担心，修改的注册表项在HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\\**  
+
+**CurrentVersion\Run里。**
 
 ## 功能列表
 

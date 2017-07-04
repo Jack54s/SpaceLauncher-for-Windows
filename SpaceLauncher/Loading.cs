@@ -13,10 +13,20 @@ namespace SpaceLauncher
             {
                 frameCount = animatedImage.GetFrameCount(new System.Drawing.Imaging.FrameDimension(animatedImage.FrameDimensionsList[0]));
             }
+            try
+            {
+                animatedImage = new Bitmap(@"Rocket.gif");
+            }
+            catch(Exception ioe)
+            {
+                MessageBox.Show("请将Rocket.gif放在与SpaceLauncher同目录下！");
+                HotKey.UnregisterHotKey(Handle, 101);
+                Application.Exit();
+            }
         }
 
         //Create a Bitmpap Object.
-        Bitmap animatedImage = new Bitmap(@"../../Rocket.gif");
+        Bitmap animatedImage;
         bool currentlyAnimating = false;
         int frameCount = 1;
 

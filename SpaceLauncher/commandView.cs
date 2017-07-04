@@ -233,7 +233,7 @@ namespace SpaceLauncher
             hi.Close();
             loading.Close();
             HotKey.UnregisterHotKey(Handle, 101);
-            //this.RegisterAppBar(true);
+            this.RegisterAppBar(true);
             Application.Exit();
         }
 
