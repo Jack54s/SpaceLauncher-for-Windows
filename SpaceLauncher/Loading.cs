@@ -20,7 +20,6 @@ namespace SpaceLauncher
             catch(Exception ioe)
             {
                 MessageBox.Show("请将Rocket.gif放在与SpaceLauncher同目录下！");
-                HotKey.UnregisterHotKey(Handle, 101);
                 Application.Exit();
             }
         }
