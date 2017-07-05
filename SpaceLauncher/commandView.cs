@@ -162,8 +162,8 @@ namespace SpaceLauncher
                     if (fileName != "")
                     {
                         keybd_event(8, 0, 0, 0);
-                        loading.Show();
                         loading.AnimateImage();
+                        loading.Show();
                         lt.Start();
                         handle = true;  //拦截键盘字符
                         String[] progargs = fileName.Split('?');

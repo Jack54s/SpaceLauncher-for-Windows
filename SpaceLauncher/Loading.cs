@@ -15,12 +15,12 @@ namespace SpaceLauncher
             }
             try
             {
-                animatedImage = new Bitmap(@"Rocket.gif");
+                animatedImage = new Bitmap(Application.StartupPath + @"\Rocket.gif");
             }
             catch(Exception ioe)
             {
                 MessageBox.Show("请将Rocket.gif放在与SpaceLauncher同目录下！");
-                Application.Exit();
+                Environment.Exit(-1);
             }
         }
 
